@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'Space Galaxy';
+    src: url('/fonts/Space_Galaxy.ttf') format('truetype');
+}
+
+body {
+    background: linear-gradient(135deg, #2c0735, #4e148c);
+    color: #97DFFC;
+    font-family: 'Space Galaxy', sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #858ae3;
+    text-shadow: 2px 2px 5px #613dc1;
+}
+
+#stats {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: left;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    box-shadow: 0 0 10px #613dc1;
+}
+
+p {
+    margin: 10px 0;
+}
+
+strong {
+    color: #613dc1;
+}
