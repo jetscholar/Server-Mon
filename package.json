@@ -1,0 +1,28 @@
+{
+  "name": "server-mon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "bin": {
+    "server-mon": "./bin/cli.js"
+  },
+  "scripts": {
+    "devStart": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "MJZ",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "os": "^0.1.2",
+    "si": "^2.0.0",
+    "socket.io": "^4.8.1",
+    "systeminformation": "^5.25.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
