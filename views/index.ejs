@@ -10,8 +10,9 @@
 <body>
     <h1>Real-Time Server Stats</h1>
     <div id="stats">
-        <p><strong>Uptime:</strong> <%= stats.uptime %> seconds</p>
+        <p><strong>Uptime:</strong> <%= stats.uptime %></p>
         <p><strong>CPU Load:</strong> <%= stats.cpuLoad.avgLoad.toFixed(2) %>%</p>
+        <p><strong>CPU Temperature:</strong> <%= stats.cpuTemp.main.toFixed(1) %>°C</p>
         <p><strong>Memory Usage:</strong> <%= ((stats.memory.used / stats.memory.total) * 100).toFixed(2) %>%</p>
         <p><strong>Disk Usage:</strong> <%= stats.disk.map(d => d.use.toFixed(2) + "%").join(", ") %></p>
         <p><strong>Network Stats:</strong> TX: <%= stats.network[0].tx_bytes %> bytes, RX: <%= stats.network[0].rx_bytes %> bytes</p>
@@ -21,8 +22,9 @@
         const socket = io();
         socket.on("stats", (data) => {
             document.getElementById("stats").innerHTML = `
-                <p><strong>Uptime:</strong> ${data.uptime} seconds</p>
+                <p><strong>Uptime:</strong> ${data.uptime}</p>
                 <p><strong>CPU Load:</strong> ${data.cpuLoad.avgLoad.toFixed(2)}%</p>
+                <p><strong>CPU Temperature:</strong> ${data.cpuTemp.main.toFixed(1)}°C</p>
                 <p><strong>Memory Usage:</strong> ${((data.memory.used / data.memory.total) * 100).toFixed(2)}%</p>
                 <p><strong>Disk Usage:</strong> ${data.disk.map(d => d.use.toFixed(2) + "%").join(", ")}</p>
                 <p><strong>Network Stats:</strong> TX: ${data.network[0].tx_bytes} bytes, RX: ${data.network[0].rx_bytes} bytes</p>
@@ -31,3 +33,4 @@
     </script>
 </body>
 </html>
+

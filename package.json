@@ -1,7 +1,7 @@
 {
   "name": "server-mon",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "A little Server Monitoring Tool",
   "main": "server.js",
   "bin": {
     "server-mon": "./bin/cli.js"

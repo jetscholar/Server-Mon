@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
-const { exec } = require("child_process");
 const os = require("os");
 const si = require("systeminformation");
 
@@ -15,17 +14,24 @@ app.set("view engine", "ejs");
 // Serve static files (for frontend assets)
 app.use(express.static("public"));
 
-// Serve static files (for frontend)
-app.use(express.static(__dirname + "/public"));
+// Function to format uptime into DD:HH:MM:SS
+const formatUptime = (seconds) => {
+    const days = Math.floor(seconds / (24 * 3600));
+    const hours = Math.floor((seconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${days}d ${hours}h ${minutes}m ${secs}s`;
+};
 
-// Function to fetch system stats
+// Function to fetch system stats including formatted uptime
 const getSystemStats = async () => {
     return {
-        uptime: os.uptime(),
+        uptime: formatUptime(os.uptime()), // 🆕 Formatted uptime
         cpuLoad: await si.currentLoad(),
         memory: await si.mem(),
         disk: await si.fsSize(),
         network: await si.networkStats(),
+        cpuTemp: await si.cpuTemperature()
     };
 };
 
@@ -44,6 +50,7 @@ io.on("connection", (socket) => {
     }, 1000);
 });
 
-server.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+server.listen(3003, () => {
+    console.log("Server running on http://localhost:3003");
 });
+
