@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// to Install the package globally, 
+// run the following command: sudo npm install -g .
+
+
 // Import the version from package.json
 const { version } = require('../package.json');
 
