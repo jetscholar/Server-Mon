@@ -26,12 +26,12 @@ const formatUptime = (seconds) => {
 // Function to fetch system stats including formatted uptime
 const getSystemStats = async () => {
     return {
-        uptime: formatUptime(os.uptime()), // 🆕 Formatted uptime
+        uptime: formatUptime(os.uptime()),
         cpuLoad: await si.currentLoad(),
         memory: await si.mem(),
         disk: await si.fsSize(),
         network: await si.networkStats(),
-        cpuTemp: await si.cpuTemperature()
+        cpuTemp: await si.cpuTemperature(),
     };
 };
 
@@ -41,16 +41,23 @@ app.get("/", async (req, res) => {
     res.render("index", { stats });
 });
 
-// Send stats to the client every second
+// WebSocket connection handling
 io.on("connection", (socket) => {
     console.log("Client connected");
-    setInterval(async () => {
+
+    // ✅ Store interval reference
+    let statsInterval = setInterval(async () => {
         const stats = await getSystemStats();
         socket.emit("stats", stats);
     }, 1000);
+
+    // ✅ Clear interval when the client disconnects
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+        clearInterval(statsInterval);
+    });
 });
 
 server.listen(3003, () => {
     console.log("Server running on http://localhost:3003");
 });
-

@@ -1,6 +1,6 @@
 {
   "name": "server-mon",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A little Server Monitoring Tool",
   "main": "server.js",
   "bin": {
