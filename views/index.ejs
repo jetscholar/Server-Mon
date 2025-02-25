@@ -16,6 +16,11 @@
         <p><strong>Memory Usage:</strong> <%= ((stats.memory.used / stats.memory.total) * 100).toFixed(2) %>%</p>
         <p><strong>Disk Usage:</strong> <%= stats.disk.map(d => d.use.toFixed(2) + "%").join(", ") %></p>
         <p><strong>Network Stats:</strong> TX: <%= stats.network[0].tx_bytes %> bytes, RX: <%= stats.network[0].rx_bytes %> bytes</p>
+        
+        <!-- ✅ Added GPU Monitoring -->
+        <p><strong>GPU:</strong> <span id="gpu_name"><%= stats.gpu.name %></span></p>
+        <p><strong>GPU Memory:</strong> <span id="gpu_memory_used"><%= stats.gpu.usedMemory %></span> MB / 
+        <span id="gpu_memory_total"><%= stats.gpu.totalMemory %></span> MB</p>
     </div>
 
     <script>
@@ -28,9 +33,14 @@
                 <p><strong>Memory Usage:</strong> ${((data.memory.used / data.memory.total) * 100).toFixed(2)}%</p>
                 <p><strong>Disk Usage:</strong> ${data.disk.map(d => d.use.toFixed(2) + "%").join(", ")}</p>
                 <p><strong>Network Stats:</strong> TX: ${data.network[0].tx_bytes} bytes, RX: ${data.network[0].rx_bytes} bytes</p>
+
+                <!-- ✅ Real-Time GPU Updates -->
+                <p><strong>GPU:</strong> ${data.gpu.name || "N/A"}</p>
+                <p><strong>GPU Memory:</strong> ${data.gpu.usedMemory || 0} MB / ${data.gpu.totalMemory || 0} MB</p>
             `;
         });
     </script>
 </body>
 </html>
+
 

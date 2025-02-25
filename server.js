@@ -3,6 +3,8 @@ const http = require("http");
 const socketIo = require("socket.io");
 const os = require("os");
 const si = require("systeminformation");
+const favicon = require('express-favicon');
+const { exec } = require("child_process");
 
 const app = express();
 const server = http.createServer(app);
@@ -13,6 +15,7 @@ app.set("view engine", "ejs");
 
 // Serve static files (for frontend assets)
 app.use(express.static("public"));
+app.use(favicon('public/assets/favicon.ico'));
 
 // Function to format uptime into DD:HH:MM:SS
 const formatUptime = (seconds) => {
@@ -23,7 +26,30 @@ const formatUptime = (seconds) => {
     return `${days}d ${hours}h ${minutes}m ${secs}s`;
 };
 
-// Function to fetch system stats including formatted uptime
+// Function to retrieve GPU info using nvidia-smi
+const getGpuInfo = () => {
+    return new Promise((resolve) => {
+        exec(
+            "nvidia-smi --query-gpu=name,memory.total,memory.used,memory.free --format=csv,noheader,nounits",
+            (error, stdout) => {
+                if (error) {
+                    console.error(`GPU Error: ${error.message}`);
+                    resolve({ name: "N/A", totalMemory: 0, usedMemory: 0, freeMemory: 0 });
+                    return;
+                }
+                const [name, totalMem, usedMem, freeMem] = stdout.split(",").map(item => item.trim());
+                resolve({
+                    name,
+                    totalMemory: parseInt(totalMem, 10),
+                    usedMemory: parseInt(usedMem, 10),
+                    freeMemory: parseInt(freeMem, 10)
+                });
+            }
+        );
+    });
+};
+
+// Function to fetch system stats including GPU data
 const getSystemStats = async () => {
     return {
         uptime: formatUptime(os.uptime()),
@@ -32,6 +58,7 @@ const getSystemStats = async () => {
         disk: await si.fsSize(),
         network: await si.networkStats(),
         cpuTemp: await si.cpuTemperature(),
+        gpu: await getGpuInfo()  // ✅ Added GPU Monitoring
     };
 };
 
@@ -58,6 +85,7 @@ io.on("connection", (socket) => {
     });
 });
 
+// Start server
 server.listen(3003, () => {
-    console.log("Server running on http://localhost:3003");
+    console.log("🚀 Server running on http://localhost:3003");
 });
